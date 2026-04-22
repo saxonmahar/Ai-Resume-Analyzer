@@ -11,9 +11,9 @@ BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MODEL_PATH = os.path.join(BASE_DIR, "models", "tfidf_vectorizer.pkl")
 RUN_SCRIPT = os.path.join(BASE_DIR, "run.py")
 
-if not os.path.exists(MODEL_PATH):
-    with st.spinner("Setting up models for first time..."):
-        subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR)
+# always retrain to ensure models are up to date
+with st.spinner("Loading models..."):
+    subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR)
 
 from src.nlp.resume_parser import extract_text_from_pdf
 from src.utils.model_loader import load_models
