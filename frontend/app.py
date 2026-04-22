@@ -12,8 +12,12 @@ MODEL_PATH = os.path.join(BASE_DIR, "models", "tfidf_vectorizer.pkl")
 RUN_SCRIPT = os.path.join(BASE_DIR, "run.py")
 
 # always retrain to ensure models are up to date
-with st.spinner("Loading models..."):
-    subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR)
+with st.spinner("Training models..."):
+    result = subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR, capture_output=True, text=True)
+    if result.returncode != 0:
+        st.error(f"Training failed: {result.stderr}")
+        st.stop()
+    st.success("Models trained successfully!")
 
 from src.nlp.resume_parser import extract_text_from_pdf
 from src.utils.model_loader import load_models
