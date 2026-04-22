@@ -182,14 +182,14 @@ if resume_path:
         # -------------------------
         st.subheader("📥 Download Report")
 
-        file = generate_report(score, results)
-
-        with open(file, "rb") as f:
-            st.download_button(
-                label="⬇️ Download Report",
-                data=f,
-                file_name="resume_report.txt"
-            )
+        if st.button("Generate Report"):
+            file = generate_report(score, results)
+            with open(file, "rb") as f:
+                st.download_button(
+                    label="⬇️ Download Report",
+                    data=f,
+                    file_name="resume_report.txt"
+                )
 
     except Exception as e:
         st.error(f"Something went wrong: {str(e)}")
