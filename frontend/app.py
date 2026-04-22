@@ -110,7 +110,7 @@ if resume_path:
             st.metric("🎯 Resume Score", f"{score}/100")
 
         with col2:
-            st.metric("💼 Jobs Matched", len(results))
+            st.metric("💼 Total Jobs in DB", len(df))
 
         with col3:
             st.metric("🏆 Top Match", top_job["job title"])
