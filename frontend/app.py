@@ -6,18 +6,9 @@ import streamlit as st
 # ensure project root is in path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# auto-train if models don't exist
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-MODEL_PATH = os.path.join(BASE_DIR, "models", "tfidf_vectorizer.pkl")
+BASE_DIR   = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 RUN_SCRIPT = os.path.join(BASE_DIR, "run.py")
-
-# always retrain to ensure models are up to date
-with st.spinner("Training models..."):
-    result = subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR, capture_output=True, text=True)
-    if result.returncode != 0:
-        st.error(f"Training failed: {result.stderr}")
-        st.stop()
-    st.success("Models trained successfully!")
+MODEL_PATH = os.path.join(BASE_DIR, "models", "tfidf_vectorizer.pkl")
 
 from src.nlp.resume_parser import extract_text_from_pdf
 from src.utils.model_loader import load_models
@@ -26,9 +17,18 @@ from src.recommender.matcher import (
     get_resume_score,
     skill_gap_analysis
 )
-
 from frontend.components.upload import upload_resume
 from src.utils.report_generator import generate_report
+
+
+@st.cache_resource
+def get_models():
+    # train only if models don't exist, then cache in memory
+    if not os.path.exists(MODEL_PATH):
+        result = subprocess.run([sys.executable, RUN_SCRIPT], cwd=BASE_DIR, capture_output=True, text=True)
+        if result.returncode != 0:
+            raise RuntimeError(f"Training failed: {result.stderr}")
+    return load_models()
 
 
 # -------------------------
@@ -79,7 +79,7 @@ if resume_path:
                 st.stop()
 
             # Load model
-            vectorizer, job_matrix, df = load_models()
+            vectorizer, job_matrix, df = get_models()
 
             # Vectorize
             resume_vector = vectorizer.transform([resume_text])
