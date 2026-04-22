@@ -84,7 +84,7 @@ if resume_path:
             score = get_resume_score(resume_vector, job_matrix)
 
             # Recommendations
-            results = recommend_jobs(resume_vector, job_matrix, df)
+            results, matched_count = recommend_jobs(resume_vector, job_matrix, df)
 
             if results.empty:
                 st.error("No job matches found.")
@@ -110,7 +110,7 @@ if resume_path:
             st.metric("🎯 Resume Score", f"{score}/100")
 
         with col2:
-            st.metric("💼 Total Jobs in DB", len(df))
+            st.metric("💼 Jobs Matched", matched_count)
 
         with col3:
             st.metric("🏆 Top Match", top_job["job title"])

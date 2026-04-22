@@ -5,16 +5,19 @@ import numpy as np
 # -------------------------
 # RECOMMEND JOBS
 # -------------------------
-def recommend_jobs(resume_vector, job_matrix, df, top_k=5):
+def recommend_jobs(resume_vector, job_matrix, df, top_k=5, threshold=0.1):
 
     scores = cosine_similarity(resume_vector, job_matrix).flatten()
 
     df = df.copy()
     df["score"] = scores
 
+    # count jobs above threshold as "matched"
+    matched_count = int((df["score"] >= threshold).sum())
+
     results = df.sort_values(by="score", ascending=False).head(top_k)
 
-    return results
+    return results, matched_count
 
 
 # -------------------------
