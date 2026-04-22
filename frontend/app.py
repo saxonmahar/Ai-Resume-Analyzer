@@ -1,4 +1,15 @@
+import os
+import sys
+import subprocess
 import streamlit as st
+
+# ensure project root is in path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
+# auto-train if models don't exist
+if not os.path.exists("models/tfidf_vectorizer.pkl"):
+    with st.spinner("Setting up models for first time..."):
+        subprocess.run([sys.executable, "run.py"])
 
 from src.nlp.resume_parser import extract_text_from_pdf
 from src.utils.model_loader import load_models
