@@ -151,8 +151,18 @@ if resume_path:
         # JOB RESULTS
         # -------------------------
         st.subheader("🔥 Top Job Matches")
+
+        # convert score to percentage
+        results["score"] = (results["score"] * 100).round(2)
+
+        # highlight top match
+        st.success(f"Top Match: {results.iloc[0]['job title']} ({results.iloc[0]['score']}%)")
+
+        # rename column
+        results = results.rename(columns={"score": "match %"})
+
         st.dataframe(
-            results[["job title", "score"]],
+            results[["job title", "match %"]],
             use_container_width=True,
             hide_index=True
         )
