@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environment
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Models (large binary files)
+models/*.pkl
+models/*.joblib
+
+# Temp files
+temp.pdf
+resume_report.txt
+resume_report.pdf
+
+# Data (raw resumes - may contain PII)
+data/raw/resumes/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
